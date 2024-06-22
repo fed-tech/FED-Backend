@@ -11,7 +11,7 @@ const addForm = async (req, res, next) => {
     try {
         const { title, description, date, img, amount, isTeam, teamsize, formFields, maxReg, eventName, upi, mail } = req.body;
 
-        const newForm = await prisma.form.create({
+        const newForm = await prisma.Form.create({
             data: {
                 title,
                 description,

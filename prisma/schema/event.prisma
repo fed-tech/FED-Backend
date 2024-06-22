@@ -1,0 +1,16 @@
+// -> event has to be removed
+
+
+// model Event {
+//   id           String @id @default(auto()) @map("_id") @db.ObjectId
+//   title        String
+//   date         String
+//   image        String
+//   description  String
+//   registration String
+//   forms        Form[]
+//   // set the name of the collection
+//   @@map("events")
+// }
+
+

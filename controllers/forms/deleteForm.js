@@ -10,7 +10,7 @@ const deleteForm = async (req, res, next) => {
     try {
         const formId = req.params.id;
 
-        await prisma.form.delete({
+        await prisma.Form.delete({
             where: { id: formId },
         });
 

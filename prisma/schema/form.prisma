@@ -1,4 +1,4 @@
-model form {
+model Form {
   id          String       @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String
@@ -15,8 +15,7 @@ model form {
   eventName   String
   active      Boolean      @default(true)
   
+  
   upi         String?
-  mail        String?
-
-  userForms   formRegistration[]
+  mail        String?        
 }

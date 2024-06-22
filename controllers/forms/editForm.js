@@ -15,7 +15,7 @@ const editForm = async (req, res, next) => {
         const formId = req.params.id;
         const { title, description, date, img, amount, isTeam, teamsize, formFields, maxReg, eventName, upi, mail, active } = req.body;
 
-        const existingForm = await prisma.form.findUnique({
+        const existingForm = await prisma.Form.findUnique({
             where: { id: formId },
         });
 
@@ -23,7 +23,7 @@ const editForm = async (req, res, next) => {
             return next(new ApiError(404, 'Form not found'));
         }
 
-        const updatedForm = await prisma.form.update({
+        const updatedForm = await prisma.Form.update({
             where: { id: formId },
             data: {
                 title,

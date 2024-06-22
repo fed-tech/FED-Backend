@@ -1,0 +1,4 @@
+/ login -> send data 
+/ alumini -> aisebhi show karega 
+/ team data 
+/ number of registration 

@@ -1,4 +1,9 @@
-model user {
+// This file contains the user schema
+
+
+
+// Define your user model
+model User {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   email         String   @unique
   name          String
@@ -12,7 +17,6 @@ model user {
   whatsappNo    String 
   member        Json?
   forms         Json?
-  userForms     formRegistration[]
-
+  // Name of the collection -> userdb
   @@map("userdb")
 }

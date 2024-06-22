@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 //@access          PUBLIC
 const getAllForms = async (req, res, next) => {
     try {
-        const forms = await prisma.form.findMany();
+        const forms = await prisma.Form.findMany();
         // console.log(forms[0].formFields)
         // delete forms[0].formFields;
         // console.log(forms)
