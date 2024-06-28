@@ -1,13 +1,23 @@
-const fs = require('fs');
 const { encode } = require('blurhash');
+const { createCanvas, loadImage } = require('canvas');
 
-const encodeImageToBlurhash = async (file)=>{
-    const buffer = await fs.promises.readFile(file);
-    const blurString = encode(new Uint8ClampedArray(buffer), 32, 32);
-    if (process.env.DEBUG === "true") {
-        console.log(blurString)
-    }
-    return blurString;
-}
+const processImageToBlurHash = async (imageBuffer) => {
+  try {
+    const image = await loadImage(imageBuffer);
+    const width = image.width;
+    const height = image.height;
 
-module.exports = encodeImageToBlurhash;
+    const canvas = createCanvas(width, height);
+    const context = canvas.getContext('2d');
+    context.drawImage(image, 0, 0, width, height);
+
+    const imageData = context.getImageData(0, 0, width, height);
+    const blurHash = encode(imageData.data, width, height, 4, 4);
+
+    return blurHash;
+  } catch (error) {
+    throw new Error(`Error processing image: ${error.message}`);
+  }
+};
+
+module.exports = { processImageToBlurHash };
