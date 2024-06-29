@@ -9,6 +9,10 @@ const logRequestBody = require('./middleware/requestLog');
 const { sendMail } = require('./utils/email/nodeMailer');
 const deleteImage = require('./utils/image/deleteImage');
 
+const passport = require("passport");
+const cookieSession = require("cookie-session");
+const passportStrategy = require("./passport");
+
 const app = express();
 
 const PORT = process.env.PORT || 3000;
@@ -21,6 +25,16 @@ app.use(cors({
     origin: process.env.CORS_ORIGIN,
     credentials: true
 }));
+
+app.use(cookieSession({
+        name: "session",
+        keys: ["somesessionkey"],
+        maxAge: 24*60*60*100,
+    })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Use body-parser to parse JSON
 app.use(bodyParser.json());
