@@ -2,15 +2,13 @@ const { ApiError } = require('../../utils/error/ApiError');
 const { PrismaClient, AccessTypes } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-const checkAccess = (...requiredAccess) => { // Using rest parameter here
+const checkAccess = (...requiredAccess) => { 
     return async (req, res, next) => {
         try {
             let user;
             if (req.user) {
-                console.log("Verifying through req.user");
                 user = req.user;
             } else {
-                console.log("Verifying through req.body");
                 const { email } = req.body;
 
                 if (!email) {
@@ -49,10 +47,10 @@ const checkAccess = (...requiredAccess) => { // Using rest parameter here
         } catch (error) {
             console.log("Could not pass checkAccess middleware");
             if (error instanceof ApiError) {
-                next(error); // Pass ApiError to the error handler middleware
+                next(error); 
             } else {
                 console.error("Unexpected error:", error);
-                next(new ApiError(500, "Internal Server Error", [], error)); // Wrap unknown errors
+                next(new ApiError(500, "Internal Server Error", [], error)); 
             }
         }
     };

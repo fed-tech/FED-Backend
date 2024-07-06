@@ -3,12 +3,17 @@ const cloudinary = require('../../config/cloudinary');
 const fs = require('fs');
 const ApiError = require('../../utils/error/ApiError');
 
-const uploadImage = async (filePath, folder = 'MemberImages') => {
+const uploadImage = async (filePath, folder = 'MemberImages', height=150, width=150, crop) => {
     try {
         console.log("Uploading file:", filePath);
         const result = await cloudinary.uploader.upload(
             filePath,
-            { folder: folder },
+            { 
+                folder: folder,
+                height : height,
+                width : width,
+                crop : crop
+            },
             (error, result) => {
                 console.log(result, error);
             }

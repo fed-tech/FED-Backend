@@ -23,22 +23,10 @@ model form {
   
   upi         String?
   mail        Boolean
-
+  
+  fields      Json?
   extra       Json?
 
   userForms   formRegistration[]
-  sections    section[]
-}
 
-
-model section {
-  id            String   @id @default(uuid()) @map("_id")
-  formId        String   @db.ObjectId
-  name          String
-  sectionDesc   String?
-  value         String   
-  type          String
-  validation    Json[]
-  form          form     @relation(fields: [formId], references: [id])
-  extra         Json?
 }
