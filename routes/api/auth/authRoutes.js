@@ -25,7 +25,8 @@ router.get(
 router.get('/login/success', loginSuccess);
 router.get('/login/failed', loginFailed);
 
-router.get('/googleAuth', googleAuth);
+// google authentication
+router.post('/googleAuth', googleAuth);
 
 // Routes to login for existing user
 router.post('/login', loginValidationRules(), validate, checkAccess('USER', 'MEMBER'), login);
