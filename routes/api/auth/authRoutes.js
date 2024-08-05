@@ -12,6 +12,7 @@ const { loginFailed } = require('../../../controllers/auth/google/loginFailed')
 
 // Import the middlewares required
 const { checkAccess } = require('../../../middleware/access/checkAccess');
+const { googleAuth } = require('../../../controllers/auth/google/googleAuthentication');
 
 // Define the authentication routes here
 router.get(
@@ -23,6 +24,8 @@ router.get(
 );
 router.get('/login/success', loginSuccess);
 router.get('/login/failed', loginFailed);
+
+router.get('/googleAuth', googleAuth);
 
 // Routes to login for existing user
 router.post('/login', loginValidationRules(), validate, checkAccess('USER', 'MEMBER'), login);
