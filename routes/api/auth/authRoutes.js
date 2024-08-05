@@ -40,8 +40,8 @@ router.post('/verifyEmail', verifyEmail)
 router.post('/register', register);
 
 // Routes to change password of existing user
-router.post('/forgotPassword', checkAccess('USER'), forgetPassword)
-router.post('/changePassword', checkAccess('USER'), changePassword)
+router.post('/forgotPassword', checkAccess('USER','MEMBER','ADMIN'), forgetPassword)
+router.post('/changePassword', checkAccess('USER','MEMBER','ADMIN'), changePassword)
 
 
 // router.post('/register', registerValidationRules(), validate, upload.single('image'), register);

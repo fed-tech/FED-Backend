@@ -49,3 +49,19 @@ const login = expressAsyncHandler(async (req, res, next) => {
 });
 
 module.exports = { login };
+
+
+// lab programs 
+/*
+apply quick sort 
+
+first/last/middle element as pivot 
+random position as the pivot
+median 3 as the pivot 
+
+case 
+random generate d 1000
+sorted 1000
+reversly sorted 1000
+record the number of comparison for each case 
+ */

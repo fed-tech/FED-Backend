@@ -16,7 +16,7 @@ const includeExtraFlag = false;
 //@access          Public
 const register = expressAsyncHandler(async (req, res, next) => {
 
-    const { regForm, otp, ...data } = req.body;
+    const { editProfileCount, regForm, otp, ...data } = req.body;
     const { email, password, name } = data;
 
     // Delete extra data
@@ -64,6 +64,7 @@ const register = expressAsyncHandler(async (req, res, next) => {
 
         // override the access type of the new user to USER
         data.access = AccessTypes.USER;
+        data.editProfileCount = 5;
 
         // Create or update the unique user
         const newUser = await createUser(data, sendMailFlag);

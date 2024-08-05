@@ -35,7 +35,18 @@ const addMember = expressAsyncHandler(async (req, res, next) => {
          // Upload the new image to cloudinary
         const result = await uploadImage(req.file.path, 'MemberImages')
         console.log("result from cloudinary : ", result)
+        if(result){
+            rest.img = result.secure_url;
+        }
        }
+         
+        try {
+            
+            rest.extra = req.body.extra?JSON.parse(req.body.extra):{};
+        } catch (error) {
+            console.error('Error parsing JSON:', error);
+            return next(new ApiError(400, 'Invalid JSON format in request body', error));
+        }
 
         // Update the user details
         const updatedUser = await createOrUpdateUser({ email: email }, rest);
