@@ -1,16 +1,25 @@
 const cloudinary = require('../../config/cloudinary');
-const ApiError = require('../../utils/error/ApiError');
+const { ApiError } = require('../error/ApiError');
 
-const deleteImage = async (imageUrl) => {
+const deleteImage = async (imageUrl, folder = '') => {
     try {
+        if (typeof imageUrl !== 'string' || typeof folder !== 'string') {
+            throw new ApiError(400, 'imageUrl and folder must be strings');
+        }
+
+        console.log(`Deleting image - ${folder}/${imageUrl}`);
+
         let imageName = imageUrl.split('/').pop().split('.')[0];
+        imageName = folder + "/" + imageName;
+
         console.log(imageName);
         const result = await cloudinary.uploader.destroy(imageName);
-        console.log(result)
+
+        console.log("Deleted Image", result);
         return result;
     } catch (err) {
         console.error("Error while deleting image:", err);
-        throw new ApiError(500, "Error while deleting image", err);
+        throw new ApiError(err.stausCode || 500, err.message || "Error while deleting image", err);
     }
 };
 

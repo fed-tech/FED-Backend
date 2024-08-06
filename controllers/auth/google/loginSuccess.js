@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { PrismaClient } = require('@prisma/client');
 const expressAsyncHandler = require('express-async-handler');
-const createUser = require('../../../utils/user/createUser');
 const prisma = new PrismaClient();
 
 const loginSuccess = expressAsyncHandler(async(req, res) => {

@@ -43,11 +43,11 @@ const forgetPassword = expressAsyncHandler(async (req, res, next) => {
         // Set auto-delete for the OTP after validity ends
         setTimeout(async () => {
             try {
-                await pirisma.otp.delete({
+                const deletedOTP = await pirisma.otp.delete({
                     where: { email: email },
                 });
                 if (process.env.DEBUG === "true") {
-                    console.log(`OTP Deleted for ${ email } : ${ generatedOTP }`);
+                    console.log(`OTP Deleted for ${ email } : ${ deletedOTP }`);
                 }
             } catch (error) {
                 console.error('Error deleting expired OTP:', error);

@@ -5,6 +5,7 @@ const { deleteMember } = require('./member/deleteMember');
 const { editProfile }= require('./member/editProfile');
 const { fetchAccessTypes } = require('./member/fetchAccessTypes');
 const { deleteUser } = require('./user/deleteUser');
+const { fetchAlumni } = require('./user/getAlumni');
 const { fetchTeam } = require('./user/getTeam');
 const { fetchUser } = require('./user/getUser');
 
@@ -16,5 +17,6 @@ module.exports = {
     deleteMember,
     deleteUser,
     fetchAccessTypes,
+    fetchAlumni,
     addMembersThroughExcel
 };

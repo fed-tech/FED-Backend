@@ -36,16 +36,32 @@ const login = expressAsyncHandler(async (req, res, next) => {
             // secure: process.env.NODE_ENV === 'production',
             // sameSite: 'strict',
             // maxAge: 3600000 // 1 hour in milliseconds
-        });    
+        });
 
         //delete the password field before sending the data
-        delete req.user.password 
+        delete req.user.password
 
-        res.status(200).json({ message: "LOGGED IN", user: req.user });
+        res.status(200).json({ message: "LOGGED IN", user: req.user, token: token });
         console.log(`Successfully LOGGEDIN !! -> ${req.user.email}`);
     } catch (error) {
         next(error);
     }
-}); // 300 -> redirection
+});
 
 module.exports = { login };
+
+
+// lab programs 
+/*
+apply quick sort 
+
+first/last/middle element as pivot 
+random position as the pivot
+median 3 as the pivot 
+
+case 
+random generate d 1000
+sorted 1000
+reversly sorted 1000
+record the number of comparison for each case 
+ */

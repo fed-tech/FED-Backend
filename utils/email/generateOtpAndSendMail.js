@@ -24,7 +24,7 @@ const sendOtpToMail = async (email, purpose, templateName, subject, allowRetry =
             throw new ApiError(400, "OTP already exists! Retry after some time");
         }
 
-        const generatedOTP = generateOtp();
+        const generatedOTP = generateOtp(4,false,false,false);
 
         // Upsert logic based on allowRetry flag
         const dbEntry = await prisma.otp.upsert({

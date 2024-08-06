@@ -38,7 +38,7 @@ const verifyEmail = expressAsyncHandler(async (req, res, next) => {
         if(!sentOtp.id){
 
         }
-        res.status(sentOtp.status).json(sentOtp.message);
+        res.status(sentOtp.status).json({message : sentOtp.message});
 
         console.log("otp sent successfully", sentOtp)
 

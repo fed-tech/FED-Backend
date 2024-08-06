@@ -2,19 +2,17 @@ const express = require('express');
 const router = express.Router();
 const { validate } = require('../../../middleware/validationMiddleware');
 const { registerValidationRules, loginValidationRules } = require('../../../middleware/validator/authValidator');
-
-require('dotenv').config();
 const passport = require('passport');
 
 // Import the auth controllers required
-const { login, verifyEmail, register, forgetPassword, changePassword, logout } = require('../../../controllers/auth/authController');
+const { login, verifyEmail, register, forgetPassword, changePassword, logout, googleLogin, googleRegister} = require('../../../controllers/auth/authController');
 // const {googleCallback} = require('../../../controllers/auth/google/googleCallback')
 const { loginSuccess } = require('../../../controllers/auth/google/loginSuccess')
 const { loginFailed } = require('../../../controllers/auth/google/loginFailed')
 
 // Import the middlewares required
 const { checkAccess } = require('../../../middleware/access/checkAccess');
-const { AccessTypes } = require('@prisma/client');
+const { googleAuth } = require('../../../controllers/auth/google/googleAuthentication');
 
 // Define the authentication routes here
 router.get(
@@ -27,16 +25,23 @@ router.get(
 router.get('/login/success', loginSuccess);
 router.get('/login/failed', loginFailed);
 
+// google authentication
+router.post('/googleAuth', googleAuth);
+
 // Routes to login for existing user
 router.post('/login', loginValidationRules(), validate, checkAccess('USER', 'MEMBER'), login);
+router.post('/googleLogin', googleLogin);
+router.post('/googleRegister', googleRegister);
+
 
 // Routes to register a new user
 router.post('/verifyEmail', verifyEmail)
-router.post('/register', registerValidationRules(), validate, register);
+// router.post('/register', registerValidationRules(), validate, register);
+router.post('/register', register);
 
 // Routes to change password of existing user
-router.post('/forgotPassword', checkAccess('USER'), forgetPassword)
-router.post('/changePassword', checkAccess('USER'), changePassword)
+router.post('/forgotPassword', checkAccess('USER','MEMBER','ADMIN'), forgetPassword)
+router.post('/changePassword', checkAccess('USER','MEMBER','ADMIN'), changePassword)
 
 
 // router.post('/register', registerValidationRules(), validate, upload.single('image'), register);

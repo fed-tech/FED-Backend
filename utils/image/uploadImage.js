@@ -1,27 +1,20 @@
 // uploadImage.js
 const cloudinary = require('../../config/cloudinary');
 const fs = require('fs');
-const ApiError = require('../../utils/error/ApiError');
+const { ApiError } = require('../error/ApiError');
 
-const uploadImage = async (filePath, folder = 'MemberImages', height=150, width=150, crop) => {
+const uploadImage = async (filePath, folder = 'MemberImages', height = 150, width = 150, crop = 'limit') => {
     try {
         console.log("Uploading file:", filePath);
-        const result = await cloudinary.uploader.upload(
-            filePath,
-            { 
-                folder: folder,
-                height : height,
-                width : width,
-                crop : crop
-            },
-            (error, result) => {
-                console.log(result, error);
-            }
-
-        );
-        // Remove file from server after upload to Cloudinary
-        fs.unlinkSync(filePath);
-
+        const options = {
+            folder: folder,
+            height: height,
+            width: width,
+            crop: crop
+        };
+        console.log("Options are", options);
+        const result = await cloudinary.uploader.upload(filePath, options);
+        fs.unlinkSync(filePath); // Remove file from server after upload to Cloudinary
         console.log("Image uploaded successfully:", result);
         return result;
     } catch (err) {
@@ -29,5 +22,6 @@ const uploadImage = async (filePath, folder = 'MemberImages', height=150, width=
         throw new ApiError(500, "Error while uploading image", err);
     }
 };
+
 
 module.exports = uploadImage;

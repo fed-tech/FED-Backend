@@ -1,31 +1,46 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const { ApiError } = require('../../utils/error/ApiError');
+const uploadimage = require('../../utils/image/uploadImage');
 
-// @description     Add forms 
+// @description     Add regForm 
 // @route           POST /api/form/addForm
 // @access          Admins
 const addForm = async (req, res, next) => {
     try {
-        // Check if isTeam is false, then set maxteamsize and minteamsize to 1 in req.body
-        if (!req.body.isTeam) {
-            req.body.maxteamsize = 1;
-            req.body.minteamsize = 1;
+
+        // Handle file upload if applicable
+        if (req.file) {
+            console.log("uploding file from disk path : ", req.file.path)
+            const result = await uploadimage(req.file.path,"FormImages");
+            console.log("Result from cloudinary:", result);
+            if (result) {
+                req.body.info.eventImg = result.secure_url; // Assuming this modifies req.body.info
+            }
+        }
+        else{
+            console.log("image not found")
+            req.body.info.eventImg = null;
         }
 
-        // Check if maxteamsize is less than minteamsize
-        if (req.body.maxteamsize < req.body.minteamsize) {
-            next(new ApiError(400, 'Max team size cannot be less than min team size'));
+        // Parse JSON strings from req.body.info and req.body.sections
+        let info;
+        let sections;
+        try {
+            info = JSON.parse(req.body.info);
+            sections = JSON.parse(req.body.sections);
+        } catch (error) {
+            console.error('Error parsing JSON:', error);
+            return next(new ApiError(400, 'Invalid JSON format in request body', error));
         }
 
-        // Check if minteamsize is less than 0
-        if (req.body.minteamsize < 0 || req.body.maxteamsize < 0) {
-            next(new ApiError(400, 'Min/Maximum team size cannot be less than 0'));
-        }
-
-        // Create new form using Prisma
+        // Create new form
         const newForm = await prisma.form.create({
-            data: req.body, 
+            data: {
+                id: req.body.id,
+                info: info,
+                sections: sections
+            },
         });
 
         res.status(201).json({
@@ -35,6 +50,13 @@ const addForm = async (req, res, next) => {
         });
     } catch (error) {
         console.error('Error in creating form:', error);
+
+        // Handle specific errors or throw a generic error
+        if (error.code === 'P2002') {
+            return next(new ApiError(400, 'Duplicate form ID. Form ID must be unique', error));
+        }
+
+        // For other unexpected errors
         return next(new ApiError(500, 'Error in creating form', error));
     }
 };

@@ -45,7 +45,7 @@ const checkAccess = (...requiredAccess) => {
 
             throw new ApiError(403, 'Unauthorized');
         } catch (error) {
-            console.log("Could not pass checkAccess middleware");
+            console.log("Could not pass checkAccess middleware",error);
             if (error instanceof ApiError) {
                 next(error); 
             } else {

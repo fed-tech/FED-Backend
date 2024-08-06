@@ -21,22 +21,23 @@ enum AccessTypes {
 }
 
 model user {
-  id         String             @id @default(auto()) @map("_id") @db.ObjectId
-  email      String             @unique 
-  name       String             
-  access     AccessTypes        @default(USER)
-  year       String?
-  img        String?            
-  blurhash   String?            
-  password   String         
-  rollNumber String?             
-  school     String?             
-  college    String?             
-  contactNo  String?            
-  whatsappNo String?            
-  extra      Json?
-  forms      String[]           @default([])
-  userForms  formRegistration[]
+  id               String             @id @default(auto()) @map("_id") @db.ObjectId
+  email            String             @unique
+  name             String?
+  access           AccessTypes        @default(USER)
+  year             String?
+  img              String?
+  blurhash         String?
+  password         String
+  rollNumber       String?
+  school           String?
+  college          String?
+  contactNo        String?
+  whatsappNo       String?
+  extra            Json?
+  regForm          String[]           @default([])
+  editProfileCount Int?
+  userForms        formRegistration[]
 
   @@map("userdb")
 }

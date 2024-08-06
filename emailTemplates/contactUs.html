@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact Us</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .footer {
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>User Issue Report</h1>
+        </div>
+        <div class="content">
+            <p>Hello Team,</p>
+            <p>The following user has reported an issue:</p>
+            <p><strong>Name:</strong> {{name}}</p>
+            <p><strong>Email:</strong> {{email}}</p>
+            <p><strong>Message:</strong></p>
+            <p>{{message}}</p>
+            <p>Please look into this issue at your earliest convenience.</p>
+            <p>Thank you,</p>
+            <p>FED KIIT Support Team</p>
+        </div>
+        <div class="footer">
+            <p>This email is intended for the tech support team. If you are not the intended recipient, please ignore this email or contact support.</p>
+        </div>
+    </div>
+</body>
+</html>

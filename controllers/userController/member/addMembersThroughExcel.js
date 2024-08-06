@@ -55,7 +55,7 @@ const addMembersThroughExcel = expressAsyncHandler(async (req, res, next) => {
             });
 
             try {
-                const updatedUser = await createOrUpdateUser({ email: userData.email }, userData, {});
+                const updatedUser = await createOrUpdateUser({ email: userData.email }, userData);
                 delete updatedUser.user.password; // Delete password from updatedUser object
                 results.push({ status: 'success', user: updatedUser });
             } catch (error) {

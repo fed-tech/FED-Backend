@@ -4,9 +4,9 @@ const createUser = require('./createUser');
 const updateUser = require('./updateUser');
 const { ApiError } = require('../error/ApiError');
 
-const createOrUpdateUser = async (key, data, override = {}, sendMailFlag = false) => {
+const createOrUpdateUser = async (key, data, sendMailFlag = false, file = null) => {
     console.log("Entering create or update user function");
-    
+
     // Determine the key if not provided
     if (!key) {
         if (data.id) {
@@ -24,12 +24,15 @@ const createOrUpdateUser = async (key, data, override = {}, sendMailFlag = false
 
         try {
             // Attempt to update the user
-            user = await updateUser(key, data, override);
+            user = await updateUser(key, data);
             operation = 'updated';
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
                 // Record not found, create a new user
-                user = await createUser({ ...data, ...key }, override, sendMailFlag);
+                user = await createUser(
+                    { ...data, ...key },
+                    sendMailFlag
+                );
                 operation = 'created';
             } else {
                 // Rethrow other errors

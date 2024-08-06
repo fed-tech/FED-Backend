@@ -3,7 +3,7 @@ const mailTransporter = require('../../config/nodeMailer');
 function sendMail(to, subject, htmlContent) {
     return new Promise((resolve, reject) => {
         let mailDetails = {
-            from: 'amaldeeppatra21@gmail.com',
+            from: process.env.MAIL_USER || "i.m.saurav003@gmail.com",
             to: to,
             subject: subject,
             html: htmlContent

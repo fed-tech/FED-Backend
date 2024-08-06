@@ -1,32 +1,8 @@
-enum formAccess {
-  ADMIN
-  PUBLIC
-  MEMBER
-}
-
 model form {
-  id          String       @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  description String
-  date        String
-  poster      String?
-  amount      Float
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  info     Json
+  sections Json[]
+  extra    Json?
 
-  isTeam      Boolean      @default(false)
-  minteamsize    Int          @default(1)
-  maxteamsize    Int          @default(1)
-
-  maxReg      Int          @default(1000)
-  eventName   String
-  active      Boolean      @default(true)
-  access      formAccess   @default(ADMIN)
-  
-  upi         String?
-  mail        Boolean
-  
-  fields      Json?
-  extra       Json?
-
-  userForms   formRegistration[]
-
+  userForms formRegistration[]
 }

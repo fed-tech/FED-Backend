@@ -6,20 +6,19 @@ const { ApiError } = require('../../../utils/error/ApiError');
 //@description     Fetch Teams
 //@route           GET /api/user/team
 //@access          Public
-const fetchTeam = expressAsyncHandler(async (req, res, next) => {
+const fetchAlumni = expressAsyncHandler(async (req, res, next) => {
     try {
         // Fetch users with specific access types
         const users = await prisma.user.findMany({
             where: {
                 access: {
-                    notIn: [AccessTypes.USER, AccessTypes.ADMIN]
+                    in: [AccessTypes.ALUMNI]
                 }
             },
             select: {
-                id: true,
                 name: true,
                 access: true,
-                img:true,
+                img: true,
                 email: true,
                 extra: true
             }
@@ -36,4 +35,4 @@ const fetchTeam = expressAsyncHandler(async (req, res, next) => {
     }
 });
 
-module.exports = { fetchTeam };
+module.exports = { fetchAlumni };
