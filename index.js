@@ -6,9 +6,9 @@ const jsonParseErrorHandler = require('./middleware/jsonParseErrorHandler');
 const cors = require("cors");
 const errorHandler = require('./middleware/errorHandler');
 const logRequestBody = require('./middleware/requestLog');
-const passport = require("passport");
+// const passport = require("passport");
 const cookieSession = require("cookie-session");
-const passportStrategy = require("./config/passport");
+// const passportStrategy = require("./config/passport");
 
 const app = express();
 
@@ -58,8 +58,8 @@ app.use(cookieSession({
 })
 );
 
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 // Use body-parser to parse JSON
 app.use(bodyParser.json());

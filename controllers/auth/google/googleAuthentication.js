@@ -125,7 +125,7 @@ const googleAuth = expressAsyncHandler(async (req, res, next) => {
             message: "LOGGED IN",
             user,
             token
-        });
+        })
 
         console.log(`Successfully ${user.id ? "LOGGED IN" : "registered"} through Google! -> ${user.email}`);
     }

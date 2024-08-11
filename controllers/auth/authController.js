@@ -5,7 +5,7 @@ const { forgetPassword } = require('./forgetPassword');
 const { changePassword } = require('./changePassword');
 const { verifyEmail } = require('./verifyEmailController');
 const { googleAuth } = require('./google/googleAuthentication');
-const { googleLogin } = require('./google/googleLogin');
+// const { googleLogin } = require('./google/googleLogin');
 
 module.exports = {
     register,
@@ -16,5 +16,5 @@ module.exports = {
     verifyEmail,
     googleAuth,
     // googleLogin,
-    googleAuth
+    // googleAuth
 };
