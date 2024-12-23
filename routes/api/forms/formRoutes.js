@@ -7,14 +7,17 @@ const { checkAccess } = require('../../../middleware/access/checkAccess');
 const multer = require('multer');
 const { imageUpload } = require('../../../middleware/upload');
 const upload = multer();
-const renameTeamController = require('../../../controllers/registration/renameTeamController');
-
+const {renameTeam} = require('../../../controllers/registration/renameTeamController');
+const { initiatePayment } = require("../../../controllers/registration/paymentController");
 
 // Add validations
 // Define your form routes here
 
 router.get('/getAllForms', formController.getAllForms)
 router.post('/contact', formController.contact);
+
+// Initiate payment route
+router.post("/initiate", initiatePayment);
 
 router.use(verifyToken);
 
@@ -62,8 +65,13 @@ router.put(
 
 router.get("/download/:id", registrationController.downloadRegistration);
 
-// Team rename/merge route
-router.post('/rename-team', renameTeam);
+// Team rename route
+router.post('/renameTeam', renameTeam);
+
+
+
+// Verify payment route
+// router.post("/verify", verifyPayment);
 
 
 module.exports = router;
