@@ -6,15 +6,11 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-/**
- * Initiates a Razorpay payment order and saves payment details to the database.
- * @route POST /api/payment/initiate
- * @body {eventId: string, amount: number}
- */
 
-// console.log("running")
 const initiatePayment = async (req, res) => {
   const { eventId, amount } = req.body;
+
+  console.log("incoming request ",req.body)
 
   // Input validation
   if (!eventId || !amount) {
@@ -24,31 +20,25 @@ const initiatePayment = async (req, res) => {
     });
   }
 
-
-
   try {
-    // Create Razorpay order
-    const options = {
-      amount: amount * 100, // Amount in paise
-      currency: "INR",
-      receipt: `receipt_${eventId}`,
-    };
-
-    const order = await razorpay.orders.create(options);
+    const order = await razorpay.orders.create({
+      amount:amount * 100,
+      currency : "INR"
+    });
 
     // Save payment details to the database
-    await savePaymentDetails({
-      eventId,
-      orderId: order.id,
-      amount: order.amount,
-      status: "PENDING",
-    });
+    // await savePaymentDetails({
+    //   eventId,
+    //   orderId: order.id,
+    //   amount: order.amount,
+    //   status: "PENDING",
+    // });
 
     // Respond with the order details
     res.status(200).json({
       success: true,
       message: "Payment initiated successfully.",
-      order,
+      orderId:order.id,
     });
   } catch (error) {
     console.error("Error initiating payment:", error);

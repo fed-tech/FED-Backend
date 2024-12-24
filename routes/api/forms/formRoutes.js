@@ -17,7 +17,7 @@ router.get('/getAllForms', formController.getAllForms)
 router.post('/contact', formController.contact);
 
 // Initiate payment route
-router.post("/initiate", initiatePayment);
+router.post("/initiatePayment", initiatePayment);
 
 router.use(verifyToken);
 
