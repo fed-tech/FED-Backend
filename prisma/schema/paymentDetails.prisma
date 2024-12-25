@@ -1,6 +1,6 @@
 model Payment {
   id          String   @id @default(cuid()) @map("_id") // Unique payment ID
-  eventTitle    String   // Associated event ID
+  eventId    String   // Associated event ID
   orderId     String   // Razorpay order ID
   paymentId   String?  // Razorpay payment ID
   amount      Int      // Payment amount in paise
@@ -9,7 +9,7 @@ model Payment {
   createdAt   DateTime @default(now())     // Timestamp of payment creation
   updatedAt   DateTime @updatedAt          // Timestamp of last update
 
-  event       Event    @relation(fields: [eventTitle], references: [id]) // Define relation to Event
+  event       Event    @relation(fields: [eventId], references: [id]) // Define relation to Event
 }
 
 model Event {
