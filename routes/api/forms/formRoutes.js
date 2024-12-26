@@ -8,7 +8,7 @@ const multer = require('multer');
 const { imageUpload } = require('../../../middleware/upload');
 const upload = multer();
 const {renameTeam} = require('../../../controllers/registration/renameTeamController');
-const { initiatePayment } = require("../../../controllers/registration/paymentController");
+const { initiatePayment, validatePayment } = require("../../../controllers/registration/paymentController");
 
 // Add validations
 // Define your form routes here
@@ -18,6 +18,8 @@ router.post('/contact', formController.contact);
 
 // Initiate payment route
 router.post("/initiatePayment", initiatePayment);
+
+router.post("/validatePayment",validatePayment )
 
 router.use(verifyToken);
 

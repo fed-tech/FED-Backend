@@ -194,32 +194,32 @@ const addRegistration = expressAsyncHandler(async (req, res, next) => {
 
         const paymentSection = sections.find(section => section.name === "Payment Details");
         const paymentSectionInActualForm = form.sections.find(section => section.name === "Payment Details")
-        if (paymentSectionInActualForm && paymentSection) {
-            console.log("payment section is present in the form");
-            if (req.files?.length > 0) {
-                console.log("files", req.files);
-                const imagePath = req.files[0].path;
-                const result = await uploadImage(imagePath, req.files[0].fieldname || "PaymentScreenshot");
-                console.log(result);
-                sectionsObject.transactionScreenShot = result.secure_url;
+        // if (paymentSectionInActualForm && paymentSection) {
+        //     console.log("payment section is present in the form");
+        //     if (req.files?.length > 0) {
+        //         console.log("files", req.files);
+        //         const imagePath = req.files[0].path;
+        //         const result = await uploadImage(imagePath, req.files[0].fieldname || "PaymentScreenshot");
+        //         console.log(result);
+        //         sectionsObject.transactionScreenShot = result.secure_url;
 
-                const paymentScreenshotField = paymentSection.fields.find(field => field.name === "Payment Screenshot" && field.type === "image");
+        //         const paymentScreenshotField = paymentSection.fields.find(field => field.name === "Payment Screenshot" && field.type === "image");
 
-                if (paymentScreenshotField) {
-                    // Update the value of the "Payment Screenshot" field with the secure URL
-                    paymentScreenshotField.value = result.secure_url;
-                    console.log("Payment Screenshot field updated successfully.");
-                } else {
-                    console.error("Payment Screenshot field not found.");
-                }
+        //         if (paymentScreenshotField) {
+        //             // Update the value of the "Payment Screenshot" field with the secure URL
+        //             paymentScreenshotField.value = result.secure_url;
+        //             console.log("Payment Screenshot field updated successfully.");
+        //         } else {
+        //             console.error("Payment Screenshot field not found.");
+        //         }
 
-            }
-            else {
-                return next(new ApiError(400, "Kindly Attach Payment Screenshot"));
-            }
-        } else if (paymentSectionInActualForm && !paymentSection) {
-            return next(new ApiError(400, "Kindly fill the Payment section"));
-        }
+        //     }
+        //     else {
+        //         return next(new ApiError(400, "Kindly Attach Payment Screenshot"));
+        //     }
+        // } else if (paymentSectionInActualForm && !paymentSection) {
+        //     return next(new ApiError(400, "Kindly fill the Payment section"));
+        // }
 
         console.log(sectionsObject)
 
