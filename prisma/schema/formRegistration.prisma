@@ -17,7 +17,7 @@ model formRegistration {
   paymentStatus    PaymentStatusTypes @default(PENDING)
   // paymentTime      DateTime?                   
   payment          Payment?           @relation
-  paymentId        String?            @unique @db.ObjectId 
+  paymentId        String?            @db.ObjectId 
 
   @@unique([formId, teamCode])
   @@map("form_registration")
