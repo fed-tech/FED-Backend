@@ -29,8 +29,15 @@ const analytics = expressAsyncHandler(async (req, res, next) => {
     const { id: formId } = req.params;
     let form = await prisma.form.findUnique({
       where: { id: formId },
-      include: { formAnalytics: true, sections : false
-        
+      include: { 
+        formAnalytics: true,
+        sections: false,
+        userReg: {
+          select: {
+            userId: true,
+            paymentStatus: true
+          }
+        }
       }
     });
     console.log("form", form);
@@ -41,27 +48,56 @@ const analytics = expressAsyncHandler(async (req, res, next) => {
     let formAnalytics = form.formAnalytics[0];
     let yearCounts;
     console.log("form analytics : ", formAnalytics);
-    // formAnalytics.regCount = formAnalytics?.regUserEmails?.length;
+    
     try {
       const users = await prisma.user.findMany({
         where: {
           email: {
-            in: formAnalytics.regUserEmails,  // Use the 'in' operator to match any email in the list
+            in: formAnalytics.regUserEmails,
           },
         },
-
       });
-      yearCounts = users.reduce((acc, obj) => {
-        let year = null;
-        if(obj.year)
-          year=obj.year.split(' ')[0];
 
-        acc[year] = (acc[year] || 0) + 1;
+      // Create a map of user IDs to payment status
+      const paymentStatusMap = form.userReg.reduce((acc, reg) => {
+        acc[reg.userId] = reg.paymentStatus;
         return acc;
       }, {});
+
+      // Add payment status to users
+      const usersWithPaymentStatus = users.map(user => ({
+        ...user,
+        paymentStatus: paymentStatusMap[user.id] || 'PENDING'
+      }));
+
+      // Separate users by payment status
+      const paidUsers = usersWithPaymentStatus.filter(user => user.paymentStatus === 'COMPLETED');
+      const pendingUsers = usersWithPaymentStatus.filter(user => user.paymentStatus === 'PENDING');
+
+      // Calculate year counts for both paid and pending users
+      yearCounts = {
+        paid: paidUsers.reduce((acc, obj) => {
+          let year = null;
+          if(obj.year)
+            year = obj.year.split(' ')[0];
+          acc[year] = (acc[year] || 0) + 1;
+          return acc;
+        }, {}),
+        pending: pendingUsers.reduce((acc, obj) => {
+          let year = null;
+          if(obj.year)
+            year = obj.year.split(' ')[0];
+          acc[year] = (acc[year] || 0) + 1;
+          return acc;
+        }, {})
+      };
+
+      // Add payment status information to form analytics
+      formAnalytics.paidUsers = paidUsers.map(user => user.email);
+      formAnalytics.pendingUsers = pendingUsers.map(user => user.email);
+
     } catch (error) {
       console.error("Error fetching all the users form the array list", error);
-      // next(new ApiError(500, "Internal Server Error", error));
     }
 
     console.log("year counts : ", yearCounts);

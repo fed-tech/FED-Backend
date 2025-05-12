@@ -116,7 +116,7 @@ app.use(cookieParser());
 // app.options('*', cors()); 
 app.use(cors(
     {
-        origin: '*',
+        origin: 'http://localhost:5173',
     }
 ))
 // app.use(cors({
