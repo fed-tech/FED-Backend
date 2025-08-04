@@ -4,12 +4,8 @@ const { ApiError } = require("../../utils/error/ApiError");
 const uploadimage = require("../../utils/image/uploadImage");
 const status = require("http-status");
 
-const QrImageHeight = 150;
-const QrImageWidth = 400;
-
 const FormImageHeight = 350.67;
 const FormImageWidth = 196.37;
-
 
 // @description     Add regForm
 // @route           POST /api/form/addForm
@@ -21,8 +17,9 @@ const addForm = async (req, res, next) => {
       eventdescription,
       eventDate,
       eventType,
-      upi,
+      paymentLink,  // Payment link field
       eventAmount,
+      upi,          // UPI field
       eventMaxReg,
       relatedEvent,
       participationType,
@@ -36,12 +33,32 @@ const addForm = async (req, res, next) => {
       isEventPast,
     } = req.body;
 
+    if (!eventTitle || !eventdescription) {
+      return next(new ApiError(status.BAD_REQUEST, "Title and description are required"));
+    }
+
+    // Improved validation for paid events
+    if (eventType === "Paid") {
+      if (!eventAmount || eventAmount === "0") {
+        return next(new ApiError(status.BAD_REQUEST, "Amount is required for paid events"));
+      }
+      if (!paymentLink && !upi) {
+        return next(new ApiError(status.BAD_REQUEST, "Either Payment link or UPI is required for paid events"));
+      }
+    }
+
     const info = {
       eventTitle,
       eventdescription,
       eventDate,
       eventType,
       eventAmount,
+      receiverDetails: {
+        upi: upi || null,
+        paymentLink: paymentLink || null,
+        // Store payment type preference
+        preferredPaymentMethod: paymentLink ? 'link' : (upi ? 'upi' : null)
+      },
       eventMaxReg,
       relatedEvent,
       participationType,
@@ -53,32 +70,16 @@ const addForm = async (req, res, next) => {
       isPublic: Boolean(isPublic) || false,
       isRegistrationClosed: Boolean(isRegistrationClosed) || false,
       isEventPast: Boolean(isEventPast) || false,
-      receiverDetails: { upi: upi, media: null },
     };
 
-    const eventImgFile = req.files
-      ? req.files?.eventImg
-        ? req.files.eventImg[0]
-        : null
-      : null;
-    const qrmediaFile = req.files
-      ? req.files?.media
-        ? req.files.media[0]
-        : null
-      : null;
-
-    if (eventImgFile) {
-      const result = await uploadimage(eventImgFile.path, "FormImages", FormImageHeight, FormImageWidth);
-      info.eventImg = result ? result.secure_url : null;
-    } else {
-      new ApiError(status.BAD_REQUEST, "Event image not found");
-    }
-
-    if (qrmediaFile) {
-      const result = await uploadimage(qrmediaFile.path, "QRMediaImages", QrImageWidth, QrImageHeight);
-      info.receiverDetails.media = result ? result.secure_url : null;
-    } else {
-      new ApiError(status.BAD_REQUEST, "QR media image not found");
+    if (req.file) {
+      try {
+        const result = await uploadimage(req.file.path, "FormImages", FormImageHeight, FormImageWidth);
+        info.eventImg = result ? result.secure_url : null;
+      } catch (uploadError) {
+        console.error("Error uploading image:", uploadError);
+        return next(new ApiError(status.INTERNAL_SERVER_ERROR, "Error uploading image"));
+      }
     }
 
     const newForm = await prisma.form.create({

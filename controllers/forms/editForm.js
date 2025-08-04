@@ -20,9 +20,9 @@ const editForm = async (req, res, next) => {
       eventdescription,
       eventDate,
       eventType,
-      upi,
+      paymentLink,
       eventAmount,
-      eventMaxReg,
+      upi,
       relatedEvent,
       participationType,
       maxTeamSize,
@@ -53,21 +53,15 @@ const editForm = async (req, res, next) => {
       eventDate,
       eventType,
       eventAmount,
-      eventMaxReg,
-      relatedEvent,
-      participationType,
-      maxTeamSize,
-      minTeamSize,
-      regDateAndTime,
-      eventPriority,
+      receiverDetails: {
+        upi: upi || null,
+        paymentLink: paymentLink || null,
+        preferredPaymentMethod: paymentLink ? 'link' : (upi ? 'upi' : null)
+      },
       successMessage,
       isPublic: isPublic === "true",
       isRegistrationClosed: isRegistrationClosed === "true",
       isEventPast: isEventPast === "true",
-      receiverDetails: {
-        ...currentForm.info.receiverDetails,
-        upi,
-      },
     };
 
     // Handle image upload if present in the request
