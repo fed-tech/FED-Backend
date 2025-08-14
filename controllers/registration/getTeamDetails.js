@@ -8,11 +8,6 @@ const expressAsyncHandler = require("express-async-handler");
 //@access          Private (requires authentication)
 const getTeamDetails = expressAsyncHandler(async (req, res, next) => {
     try {
-        console.log("=== getTeamDetails called ===");
-        console.log("Request params:", req.params);
-        console.log("Request user:", req.user);
-        console.log("User email:", req.user?.email);
-        
         const { formId } = req.params;
         const { email } = req.user;
 
@@ -37,6 +32,10 @@ const getTeamDetails = expressAsyncHandler(async (req, res, next) => {
             }
         });
 
+        if (!teamRegistration) {
+            return next(new ApiError(404, "No team registration found for this user in the specified form"));
+        }
+
         const teamMembers = await prisma.user.findMany({
             where: {
                 email: {
@@ -44,7 +43,6 @@ const getTeamDetails = expressAsyncHandler(async (req, res, next) => {
                 }
             },
             select: {
-                id: true,
                 name: true,
                 email: true,
                 img: true,
@@ -53,9 +51,6 @@ const getTeamDetails = expressAsyncHandler(async (req, res, next) => {
                 year: true
             }
         });
-
-
-
 
         // Check if this is a team event
         const isTeamEvent = teamRegistration.form.info.participationType === "Team";

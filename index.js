@@ -113,9 +113,9 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(cookieParser());
 
 app.use(cors({
-  origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  credentials: true,
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
 }));
 app.options('*', cors()); // handle preflight requests
 
@@ -182,11 +182,11 @@ app.use(jsonParseErrorHandler);
 // Error-handling middleware - should be at the end
 app.use(errorHandler);
 
-app.use('/keep-alive',(req,res) => {
+app.use('/keep-alive', (req, res) => {
     res.sendStatus(200);
     // res.status(200).json({message : "Alive"});
 })
-app.use('/',(req,res) => {
+app.use('/', (req, res) => {
     res.sendStatus(404);
 })
 // Start server

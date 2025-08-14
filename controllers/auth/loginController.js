@@ -12,6 +12,8 @@ const login = expressAsyncHandler(async (req, res, next) => {
     // const { email, password } = req.body;
 
     try {
+
+        console.log("user ", req.user);
         // const user = await prisma.user.findUnique({
         //     where: { email }
         // });

@@ -1,0 +1,20 @@
+model attendance {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  userId String @db.ObjectId
+
+  formId String @db.ObjectId
+
+  teamName String
+  teamCode String
+
+  isPresent         Boolean @default(false)
+  isPaymentVerified Boolean @default(false)
+
+  info Json
+
+  markedAt DateTime?
+
+  @@unique([formId, userId, teamCode])
+  @@map("attendance")
+}
