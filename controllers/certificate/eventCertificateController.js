@@ -1464,7 +1464,6 @@ const sendCertViaEmail = async (req, res) => {
           certificateId,
           mailed: false,
         })),
-        skipDuplicates: true,
       });
       console.log("[sendCertViaEmail] Batch insert completed.");
 
