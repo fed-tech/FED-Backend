@@ -107,33 +107,38 @@ const PORT = process.env.PORT || 3000;
 
 const frontendUrl = process.env.DOMAIN;
 console.log("Frontend URL:", frontendUrl);
+
+const allowedOrigins = [
+  "https://www.fedkiit.com",
+  "https://fedkiit.com",
+  "http://localhost:5173",
+  "http://localhost:3000"
+];
+
+// Shared CORS options for both normal and preflight requests
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true); // reflect request origin
+    }
+    callback(null, false);
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  exposedHeaders: ["Content-Length"]
+};
+
 // Middlewares
 app.use(express.json({ limit: '16kb' }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(cookieParser());
 
-app.use(cors({
-    origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl)
-        if (!origin) return callback(null, true);
-
-        const allowedOrigins = [
-            "http://localhost:5173",
-            "http://localhost:3000",
-            "https://fedkiit.com",
-            "https://www.fedkiit.com"
-        ];
-
-        if (allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(null, true); // Allow all in dev, restrict in production
-        }
-    },
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    credentials: true,
-}));
-app.options('*', cors()); // handle preflight requests
+// Apply CORS for normal requests
+app.use(cors(corsOptions));
+// Ensure preflight responses use the same options (no wildcard when credentials)
+app.options('*', cors(corsOptions));
 
 // const allowedOrigins = [
 //   "https://fedkiit.com",

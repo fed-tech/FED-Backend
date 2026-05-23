@@ -41,6 +41,7 @@
     "puppeteer-extra-plugin-stealth": "^2.11.2",
     "qrcode": "^1.5.4",
     "react-otp-input": "^3.1.1",
+    "resend": "^6.7.0",
     "sharp": "^0.33.4",
     "uuid": "^10.0.0",
     "xlsx": "^0.18.5"

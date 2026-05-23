@@ -33,8 +33,7 @@ RUN apt-get update && apt-get install -y \
     xdg-utils \
     wget \
     --no-install-recommends && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
@@ -43,17 +42,20 @@ WORKDIR /app
 ARG DATABASE_URL
 ENV DATABASE_URL=${DATABASE_URL}
 
-# Copy package files and install deps
-COPY package*.json ./
-RUN npm install --omit=dev
+# Skip Puppeteer Chromium download
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 
-# Copy source
+# Copy package files and install dependencies
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+# Copy source code
 COPY . .
 
 # Make build.sh executable
 RUN chmod +x ./build.sh
 
-# Expose app port
+# Expose port
 EXPOSE 5000
 
 # Start

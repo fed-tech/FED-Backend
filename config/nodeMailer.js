@@ -1,4 +1,12 @@
 // config/nodeMailer.js
+// DEPRECATED: This file has been replaced by Resend API
+// See: config/resend.js and utils/email/nodeMailer.js for new implementation
+// Date: January 2026
+
+/* ============================================================
+   ORIGINAL NODEMAILER CONFIGURATION (COMMENTED OUT)
+   ============================================================
+
 const nodemailer = require("nodemailer");
 
 // Primary transporter (e.g., Gmail)
@@ -42,4 +50,15 @@ module.exports = {
     secondary: mailTransporterSecondary,
     tertiary: mailTransporterTertiary,
     mailerSend: mailTransporterMailerSend,
+};
+
+============================================================ */
+
+// Export empty object to prevent import errors during transition
+// This file is no longer used - Resend API is used instead
+module.exports = {
+    primary: null,
+    secondary: null,
+    tertiary: null,
+    mailerSend: null,
 };
