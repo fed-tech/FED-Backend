@@ -17,6 +17,9 @@ const upload = multer();
 router.get("/getAllForms", formController.getAllForms);
 router.post("/contact", formController.contact);
 
+// [v2] PUBLIC — email action link handler (no auth required)
+router.get("/respondJoinRequest", registrationController.respondJoinRequest);
+
 router.use(verifyToken);
 
 router.get("/teamDetails/:formId", checkAccess("USER"), getTeamDetails);
@@ -28,18 +31,26 @@ router.use(
   registrationController.addRegistration
 );
 
+// Team management routes
+router.post("/leaveTeam", checkAccess("USER"), registrationController.leaveTeam);
+router.post("/inviteTeamMember", checkAccess("USER"), registrationController.inviteTeamMember);
+router.get("/inviteLink/:formId", checkAccess("USER"), registrationController.getTeamInviteLink);
+router.patch("/renameTeam", checkAccess("USER"), registrationController.renameTeam);
+router.post("/removeTeamMember", checkAccess("USER"), registrationController.removeTeamMember);
+// [v2] New team management routes
+router.post("/createTeam", checkAccess("USER"), registrationController.createTeam);
+router.post("/joinTeam", checkAccess("USER"), registrationController.joinTeam);
+router.get("/searchTeams/:formId", checkAccess("USER"), registrationController.searchTeams);
+router.post("/sendJoinRequest", checkAccess("USER"), registrationController.sendJoinRequest);
+router.get("/joinRequestUpdates/:formId", checkAccess("USER"), registrationController.checkJoinRequestUpdates);
+router.get("/allJoinRequestUpdates", checkAccess("USER"), registrationController.checkAllJoinRequestUpdates);
+
 router.get(
   "/export-attendance/:id",
   checkAccess("ADMIN"),
   registrationController.exportAttendance
 );
 
-router.use(
-  "/register",
-  checkAccess("USER"),
-  imageUpload.any(),
-  registrationController.addRegistration
-);
 router.get("/getFormAnalytics/:id", formController.analytics);
 
 router.get(

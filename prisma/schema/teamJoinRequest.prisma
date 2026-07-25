@@ -1,0 +1,18 @@
+model teamJoinRequest {
+  id                  String    @id @default(auto()) @map("_id") @db.ObjectId
+  formId              String    @db.ObjectId
+  requesterEmail      String
+  requesterName       String
+  teamRegistrationId  String    @db.ObjectId
+  teamName            String?   // Team name at time of request (for display in notifications)
+  leaderEmail         String
+  status              String    @default("PENDING") // PENDING | ACCEPTED | REJECTED | AUTO_EXPIRED | EXPIRED
+  seenByRequester     Boolean   @default(false) // Has the requester seen the decision in-app?
+  createdAt           DateTime  @default(now())
+  expiresAt           DateTime
+  respondedAt         DateTime?
+
+  @@map("team_join_request")
+  @@index([formId, requesterEmail])
+  @@index([teamRegistrationId, status])
+}

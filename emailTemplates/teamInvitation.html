@@ -1,0 +1,96 @@
+<!--
+Placeholders:
+- {{eventName}} : Name of the event.
+- {{teamName}} : Name of the team the invitee is being invited to.
+- {{teamCode}} : Unique code for the team.
+- {{inviterName}} : Name of the person sending the invitation.
+- {{inviteLink}} : Direct link to join the team.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Team Invitation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+        }
+        .content {
+            padding: 20px;
+            font-size: 16px;
+        }
+        .footer {
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+        }
+        .team-details {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e6f7ff;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .team-details p {
+            margin: 10px 0;
+        }
+        .team-details strong {
+            color: #0066cc;
+        }
+        .join-button {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 30px;
+            background-color: #FF8A00;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>You're Invited to Join a Team!</h1>
+        </div>
+        <div class="content">
+            <p>Hello,</p>
+            <p><strong>{{inviterName}}</strong> has invited you to join their team for <strong>{{eventName}}</strong>.</p>
+
+            <div class="team-details">
+                <p><strong>Team Name: {{teamName}}</strong></p>
+                <p><strong>Team Code: {{teamCode}}</strong></p>
+                <p>
+                    <a href="{{inviteLink}}" class="join-button">Join Team</a>
+                </p>
+            </div>
+
+            <p style="margin-top: 20px;">To join, click the button above or go to the event registration page and enter the team code when selecting "Join Team".</p>
+
+            <p style="margin-bottom: 0;">Thank you,</p>
+            <p style="margin-top: 2px;">FED KIIT Team</p>
+        </div>
+        <div class="footer">
+            <p>If you did not expect this invitation, please ignore this email or contact support at <a href="mailto:fedkiit+support@gmail.com">fedkiit+support@gmail.com</a>.</p>
+        </div>
+    </div>
+</body>
+</html>

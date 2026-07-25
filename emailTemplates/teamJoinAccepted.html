@@ -1,0 +1,87 @@
+<!--
+Placeholders:
+- {{requesterName}} : Name of the person who requested to join
+- {{teamName}} : Name of the team they joined
+- {{eventName}} : Name of the event
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Join Request Accepted</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        .content {
+            padding: 20px;
+            font-size: 16px;
+        }
+
+        .footer {
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .success-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .success-box strong {
+            color: #2e7d32;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎉 You're In!</h1>
+        </div>
+        <div class="content">
+            <p>Hi {{requesterName}},</p>
+            <p>Great news! Your request to join a team has been <strong>accepted</strong>.</p>
+
+            <div class="success-box">
+                <p><strong>Team: {{teamName}}</strong></p>
+                <p><strong>Event: {{eventName}}</strong></p>
+            </div>
+
+            <p style="margin-top: 20px;">You are now part of the team. Head over to the Team Management page to see your
+                team details.</p>
+
+            <p style="margin-bottom: 0;">Good luck! 🚀</p>
+            <p style="margin-top: 2px;">FED KIIT Team</p>
+        </div>
+        <div class="footer">
+            <p>For support, contact <a href="mailto:fedkiit+support@gmail.com">fedkiit+support@gmail.com</a>.</p>
+        </div>
+    </div>
+</body>
+
+</html>

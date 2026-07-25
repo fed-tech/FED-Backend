@@ -59,13 +59,41 @@ const getTeamDetails = expressAsyncHandler(async (req, res, next) => {
             return next(new ApiError(400, "This is not a team event"));
         }
 
+        // [v2] Check if user is teamless (UNAFFILIATED)
+        if (teamRegistration.teamName === "UNAFFILIATED") {
+            return res.status(200).json({
+                success: true,
+                message: "User is registered but not yet on a team",
+                data: {
+                    isTeamless: true,
+                    eventTitle: teamRegistration.form.info.eventTitle,
+                    maxTeamSize: parseInt(teamRegistration.form.info.maxTeamSize) || 1,
+                    minTeamSize: parseInt(teamRegistration.form.info.minTeamSize) || 1,
+                    isRegistrationClosed: teamRegistration.form.info.isRegistrationClosed || false,
+                    isEventPast: teamRegistration.form.info.isEventPast || false,
+                    formId: teamRegistration.formId,
+                }
+            });
+        }
+
+        // Fetch leader's email for identification
+        const leaderUser = await prisma.user.findUnique({
+            where: { id: teamRegistration.userId },
+            select: { email: true }
+        });
+
         const teamDetails = {
             teamName: teamRegistration.teamName,
             teamCode: teamRegistration.teamCode,
             teamSize: teamRegistration.teamSize,
-            maxTeamSize: teamRegistration.form.info.maxTeamSize || 1,
+            maxTeamSize: parseInt(teamRegistration.form.info.maxTeamSize) || 1,
+            minTeamSize: parseInt(teamRegistration.form.info.minTeamSize) || 1,
             members: teamMembers,
-            eventTitle: teamRegistration.form.info.eventTitle
+            eventTitle: teamRegistration.form.info.eventTitle,
+            leaderEmail: leaderUser?.email || null,
+            isRegistrationClosed: teamRegistration.form.info.isRegistrationClosed || false,
+            isEventPast: teamRegistration.form.info.isEventPast || false,
+            formId: teamRegistration.formId,
         };
 
         res.status(200).json({

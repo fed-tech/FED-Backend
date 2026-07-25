@@ -1,0 +1,140 @@
+<!--
+Placeholders:
+- {{leaderName}} : Name of the team leader receiving the request
+- {{requesterName}} : Name of the person requesting to join
+- {{requesterEmail}} : Email of the person requesting to join
+- {{teamName}} : Name of the team
+- {{eventName}} : Name of the event
+- {{teamSize}} : Current team size
+- {{maxTeamSize}} : Maximum team size
+- {{acceptUrl}} : URL to accept the request
+- {{rejectUrl}} : URL to reject the request
+- {{expiryHours}} : Hours until the request expires
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Team Join Request</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        .content {
+            padding: 20px;
+            font-size: 16px;
+        }
+
+        .footer {
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .request-details {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff3e0;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .request-details p {
+            margin: 10px 0;
+        }
+
+        .request-details strong {
+            color: #e65100;
+        }
+
+        .action-buttons {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .accept-button {
+            display: inline-block;
+            margin: 5px 10px;
+            padding: 14px 35px;
+            background-color: #05C165;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .reject-button {
+            display: inline-block;
+            margin: 5px 10px;
+            padding: 14px 35px;
+            background-color: #D63500;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .expiry-note {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #888;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏆 Team Join Request</h1>
+        </div>
+        <div class="content">
+            <p>Hi {{leaderName}},</p>
+            <p><strong>{{requesterName}}</strong> ({{requesterEmail}}) wants to join your team for
+                <strong>{{eventName}}</strong>.</p>
+
+            <div class="request-details">
+                <p><strong>Team: {{teamName}}</strong></p>
+                <p>Current Members: <strong>{{teamSize}}/{{maxTeamSize}}</strong></p>
+            </div>
+
+            <div class="action-buttons">
+                <a href="{{acceptUrl}}" class="accept-button">✅ Accept</a>
+                <a href="{{rejectUrl}}" class="reject-button">❌ Reject</a>
+            </div>
+
+            <p class="expiry-note">This request will expire in {{expiryHours}} hours.</p>
+
+            <p style="margin-bottom: 0;">Thank you,</p>
+            <p style="margin-top: 2px;">FED KIIT Team</p>
+        </div>
+        <div class="footer">
+            <p>If you did not expect this request, you can safely ignore it or reject it. For support, contact <a
+                    href="mailto:fedkiit+support@gmail.com">fedkiit+support@gmail.com</a>.</p>
+        </div>
+    </div>
+</body>
+
+</html>
