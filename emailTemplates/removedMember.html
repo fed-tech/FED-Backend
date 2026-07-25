@@ -1,0 +1,88 @@
+<!--
+Placeholders:
+- {{teamName}} : Name of the team
+- {{eventName}} : Name of the event
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Team Membership Update</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        .content {
+            padding: 20px;
+            font-size: 16px;
+        }
+
+        .footer {
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .info-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff3e0;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .info-box strong {
+            color: #e65100;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Team Membership Update</h1>
+        </div>
+        <div class="content">
+            <p>Hi there,</p>
+            <p>You have been removed from the team <strong>{{teamName}}</strong> for the event
+                <strong>{{eventName}}</strong>.</p>
+
+            <div class="info-box">
+                <p>But don't worry! Your registration for the event is still active. You can:</p>
+                <p><strong>• Browse and join other available teams</strong></p>
+                <p><strong>• Create your own brand new team</strong></p>
+            </div>
+
+            <p style="margin-top: 20px;">Head over to the Team Management page to explore your options and get back in
+                the action.</p>
+
+            <p style="margin-bottom: 0;">Best wishes,</p>
+            <p style="margin-top: 2px;">FED KIIT Team</p>
+        </div>
+        <div class="footer">
+            <p>For support, contact <a href="mailto:fedkiit+support@gmail.com">fedkiit+support@gmail.com</a>.</p>
+        </div>
+    </div>
+</body>
+
+</html>

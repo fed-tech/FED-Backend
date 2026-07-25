@@ -17,7 +17,8 @@ const validateCurrentForm = expressAsyncHandler(async (form, user, userSubmitted
         throw new ApiError(400, "Sorry ! Registration has been closed for this event. If you feel this is an error, kindly contact us on fedkiit@gmail.com");
     }
 
-    if (!isPublic && req.user.access != AccessTypes.ADMIN) {
+    // [v1] if (!isPublic && req.user.access != AccessTypes.ADMIN) {
+    if (!isPublic && user.access != AccessTypes.ADMIN) {
         throw new ApiError(401, "Registering to a private form is not allowed. If you feel this is an error, kindly contact us on fedkiit@gmail.com");
     }
 
@@ -117,78 +118,91 @@ const addRegistration = expressAsyncHandler(async (req, res, next) => {
 
         if (info.participationType !== "Individual") {
 
-            // console.log("related", relatedEventForm.info.eventTitle)
-            // console.log("eventTitle", info.eventTitle)
-            // console.log("count", form.formAnalytics[0]?.regUserEmails.length);
-            teamCode = await generateTeamCode(relatedEventForm?.info.eventTitle, info.eventTitle, form.formAnalytics[0]?.regUserEmails.length);
+            // [v2] — Teamless registration: always register as UNAFFILIATED
+            // Team creation/joining now happens post-registration on the Team Management page
+            teamCode = `SOLO-${req.user.id}-${Math.floor(1000 + Math.random() * 9000)}`;
+            teamName = ["UNAFFILIATED"];
+            regTeamMemEmails.push(req.user.email);
 
-
-            createTeamSection = sections.find(section => section.name === "Create Team");
-            joinTeamSection = !createTeamSection ? sections.find(section => section.name === "Join Team") : null;
-
-
-            if (createTeamSection) {
-                const teamNameField = createTeamSection.fields.find(field => field.name === "Team Name");
-                if (teamNameField) {
-                    teamName = [teamNameField.value.toUpperCase().trim()];
-                    if (form.formAnalytics[0]?.regTeamNames.includes(teamName[0])) {
-                        return next(new ApiError(400, "! This team name already taken !\n Please choose a different one."));
-                    }
-                    regTeamMemEmails.push(req.user.email);
-                } else {
-                    return next(new ApiError(400, "Team Name field is required for Create Team"));
-                }
-            } else if (joinTeamSection) {
-                const teamCodeField = joinTeamSection.fields.find(field => field.name === "Team Code");
-
-                if (teamCodeField) {
-                    teamExists = await prisma.formRegistration.findUnique({
-                        where: {
-                            formId_teamCode: {
-                                formId: _id,
-                                teamCode: teamCodeField.value
-                            }
-                        },
-                    });
-
-                    if (!teamExists) {
-                        console.log("Team does not exist");
-                        return next(new ApiError(404, "Invalid team code"));
-                    }
-
-                    if (teamExists.regTeamMemEmails.length >= (parseInt(info.maxTeamSize) || 1)) {
-                        console.log("team full");
-                        return next(new ApiError(400, "This team is full"));
-                    }
-
-                    // Log the teamExists object in a readable format
-                    console.log("team Exists", JSON.stringify(teamExists, null, 2));
-
-
-                    teamName = [teamExists.teamName];
-                    // console.log("team name array joining creating team", teamName)
-                    // teamName = [...new Set([...teamName, ...(form.formAnalytics?.length > 0 ? form.formAnalytics[0].regTeamNames : [])])];
-                    console.log("team name before ", teamName)
-                    console.log("existing team names", form.formAnalytics?.length > 0 ? form.formAnalytics[0].regTeamNames : []);
-
-                    // console.log("Team name array after joining team")
-
-                    teamCode = teamCodeField.value;
-                    regTeamMemEmails = [...teamExists.regTeamMemEmails, req.user.email];
-                }
-
-
-                // sections.user_id = req.user.id;
-                // sections.user_email = req.user.email;
-                // sections.user_name = req.user.name;
-
-
-                // sectionsObject.push({ sections });
-            }
+            // [v1] Old team section detection logic — commented out, not deleted
+            // [v1] // console.log("related", relatedEventForm.info.eventTitle)
+            // [v1] // console.log("eventTitle", info.eventTitle)
+            // [v1] // console.log("count", form.formAnalytics[0]?.regUserEmails.length);
+            // [v1] teamCode = await generateTeamCode(relatedEventForm?.info.eventTitle, info.eventTitle, form.formAnalytics[0]?.regUserEmails.length);
+            // [v1]
+            // [v1]
+            // [v1] createTeamSection = sections.find(section => section.name === "Create Team");
+            // [v1] joinTeamSection = !createTeamSection ? sections.find(section => section.name === "Join Team") : null;
+            // [v1]
+            // [v1]
+            // [v1] if (createTeamSection) {
+            // [v1]     const teamNameField = createTeamSection.fields.find(field => field.name === "Team Name");
+            // [v1]     if (teamNameField) {
+            // [v1]         teamName = [teamNameField.value.toUpperCase().trim()];
+            // [v1]         if (form.formAnalytics[0]?.regTeamNames.includes(teamName[0])) {
+            // [v1]             return next(new ApiError(400, "! This team name already taken !\n Please choose a different one."));
+            // [v1]         }
+            // [v1]         regTeamMemEmails.push(req.user.email);
+            // [v1]     } else {
+            // [v1]         return next(new ApiError(400, "Team Name field is required for Create Team"));
+            // [v1]     }
+            // [v1] } else if (joinTeamSection) {
+            // [v1]     const teamCodeField = joinTeamSection.fields.find(field => field.name === "Team Code");
+            // [v1]
+            // [v1]     if (teamCodeField) {
+            // [v1]         teamExists = await prisma.formRegistration.findUnique({
+            // [v1]             where: {
+            // [v1]                 formId_teamCode: {
+            // [v1]                     formId: _id,
+            // [v1]                     teamCode: teamCodeField.value
+            // [v1]                 }
+            // [v1]             },
+            // [v1]         });
+            // [v1]
+            // [v1]         if (!teamExists) {
+            // [v1]             console.log("Team does not exist");
+            // [v1]             return next(new ApiError(404, "Invalid team code"));
+            // [v1]         }
+            // [v1]
+            // [v1]         if (teamExists.regTeamMemEmails.length >= (parseInt(info.maxTeamSize) || 1)) {
+            // [v1]             console.log("team full");
+            // [v1]             return next(new ApiError(400, "This team is full"));
+            // [v1]         }
+            // [v1]
+            // [v1]         // Log the teamExists object in a readable format
+            // [v1]         console.log("team Exists", JSON.stringify(teamExists, null, 2));
+            // [v1]
+            // [v1]
+            // [v1]         teamName = [teamExists.teamName];
+            // [v1]         // console.log("team name array joining creating team", teamName)
+            // [v1]         // teamName = [...new Set([...teamName, ...(form.formAnalytics?.length > 0 ? form.formAnalytics[0].regTeamNames : [])])];
+            // [v1]         console.log("team name before ", teamName)
+            // [v1]         console.log("existing team names", form.formAnalytics?.length > 0 ? form.formAnalytics[0].regTeamNames : []);
+            // [v1]
+            // [v1]         // console.log("Team name array after joining team")
+            // [v1]
+            // [v1]         teamCode = teamCodeField.value;
+            // [v1]         regTeamMemEmails = [...teamExists.regTeamMemEmails, req.user.email];
+            // [v1]     }
+            // [v1]
+            // [v1]
+            // [v1]     // sections.user_id = req.user.id;
+            // [v1]     // sections.user_email = req.user.email;
+            // [v1]     // sections.user_name = req.user.name;
+            // [v1]
+            // [v1]
+            // [v1]     // sectionsObject.push({ sections });
+            // [v1] }
 
         }
 
-        formTrackerTeamNameList = [...new Set([...teamName, ...(form.formAnalytics?.length > 0 ? form.formAnalytics[0].regTeamNames : [])])];
+        // [v2] For teamless (UNAFFILIATED) registrations, do NOT push team name to tracker
+        if (teamName[0] !== "UNAFFILIATED") {
+            formTrackerTeamNameList = [...new Set([...teamName, ...(form.formAnalytics?.length > 0 ? form.formAnalytics[0].regTeamNames : [])])];
+        } else {
+            formTrackerTeamNameList = form.formAnalytics?.length > 0 ? form.formAnalytics[0].regTeamNames : [];
+        }
+        // [v1] formTrackerTeamNameList = [...new Set([...teamName, ...(form.formAnalytics?.length > 0 ? form.formAnalytics[0].regTeamNames : [])])];
         console.log("set data ", formTrackerTeamNameList);
         console.log("reg team members ", regTeamMemEmails)
 
