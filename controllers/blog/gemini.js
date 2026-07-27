@@ -21,10 +21,10 @@ const getSummary = async (req, res) => {
     const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
     const result = await model.generateContent(prompt);
     const text = await result.response.text();
-    console.log("✅ Gemini /summary response:", text);
+    console.log("  Gemini /summary response:", text);
     res.json({ summary: text.trim() });
   } catch (err) {
-    console.error("❌ Error in /summary:", err);
+    console.error(" Error in /summary:", err);
     res.status(500).json({ error: "Something went wrong with Gemini Summary API." });
   }
 };
@@ -76,7 +76,7 @@ const getAutofill = async (req, res) => {
     );
 
     if (bannerImage) {
-      console.log("✅ Picked banner image:", bannerImage);
+      console.log("  Picked banner image:", bannerImage);
     } else {
       console.warn("⚠️ No suitable banner image found.");
     }
@@ -136,7 +136,7 @@ ${blogText}
     const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
     const result = await model.generateContent(prompt);
     const responseText = await result.response.text();
-    console.log("✅ Gemini /autofill response:", responseText);
+    console.log("  Gemini /autofill response:", responseText);
 
     // 🧠 Parse Gemini response
     let parsed;
@@ -162,7 +162,7 @@ ${blogText}
     });
 
   } catch (err) {
-    console.error("❌ Error in /autofill:", err);
+    console.error(" Error in /autofill:", err);
     if (browser) await browser.close();
     res.status(500).json({ error: "Something went wrong with Gemini Autofill." });
   }

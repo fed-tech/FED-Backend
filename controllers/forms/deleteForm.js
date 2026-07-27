@@ -9,25 +9,42 @@ const deleteImage = require('../../utils/image/deleteImage');
 //@route           DELETE /api/form/deleteForm/:id
 //@access          Admins
 const deleteForm = async (req, res, next) => {
-    console.log("deleteForm");
+    console.log("deleteForm: start");
     try {
         const formId = req.params.id;
+        console.log("deleteForm: formId", formId);
+        console.log("deleteForm: user", {
+            id: req.user?.id,
+            email: req.user?.email,
+            access: req.user?.access,
+        });
 
-        const deletedForm = await prisma.form.delete({
+        if (!formId) {
+            return next(new ApiError(400, "Form id is required"));
+        }
+
+        const existingForm = await prisma.form.findUnique({
             where: { id: formId },
         });
+
+        if (!existingForm) {
+            console.log("deleteForm: form not found", formId);
+            return next(new ApiError(404, "Form not found"));
+        }
+
+        const [registrationsDeleted, trackersDeleted, deletedForm] = await prisma.$transaction([
+            prisma.formRegistration.deleteMany({ where: { formId } }),
+            prisma.registrationTracker.deleteMany({ where: { formId } }),
+            prisma.form.delete({ where: { id: formId } }),
+        ]);
+
+        console.log("deleteForm: registrationsDeleted", registrationsDeleted?.count);
+        console.log("deleteForm: trackersDeleted", trackersDeleted?.count);
 
         // Delete image from cloudinary using promise
         const imageDeletePromise = deletedForm && deletedForm.info && deletedForm.info.eventImg
             ? deleteImage(deletedForm.info.eventImg, 'FormImages')
             : Promise.resolve();
-
-        // Delete all registrations
-        if (req.body.deleteRegistrations) {
-            await prisma.formRegistration.deleteMany({
-                where: { formId: formId }
-            });
-        }
 
         // Handle the image deletion promise
         imageDeletePromise
